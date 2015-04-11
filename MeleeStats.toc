@@ -1,0 +1,9 @@
+## Interface: 11200
+## Title: MeleeStats
+## Notes: MeleeStats
+## Author: rexas - rexas.net/wow
+## Version: 1.0
+## SavedVariablesPerCharacter: MeleeStats_Settings
+## RequiredDeps: BonusScanner
+MeleeStats.lua
+MeleeStats_Tooltip.xml
