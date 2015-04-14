@@ -23,14 +23,14 @@ SlashCmdList["MeleeStats"] = function(args)
 		then
 			MeleeStats_("Frame locked");
 			MeleeStats_Settings["frameLocked"] = true;
-			f.texture:SetVertexColor(0,0,0,0)
+			MeleeStats_Settings.texture:SetVertexColor(0,0,0,0)
 			MeleeStats_Frame:SetMovable(false);
 			MeleeStats_Frame:EnableMouse(false);
 			MeleeStats_Frame:SetResizable(false);
 		else
 			MeleeStats_("Frame unlocked");
 			MeleeStats_Settings["frameLocked"] = false;
-			f.texture:SetVertexColor(0,0,0,0.4)
+			MeleeStats_Settings.texture:SetVertexColor(0,0,0,0.4)
 			MeleeStats_Frame:SetMovable(true);
 			MeleeStats_Frame:EnableMouse(true);
 			MeleeStats_Frame:SetResizable(true);
@@ -235,13 +235,13 @@ MeleeStats_Frame = "";
 MeleeStats_Frame_Font = "";
 
 function MeleeStats_MakeFrame()
-	f = MeleeStats_Frame;
+	local f = MeleeStats_Frame;
 	f.texture = f:CreateTexture(nil,"background");
 	f.texture:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background");
 	f:SetWidth(500)
 	f:SetHeight(30)
 	f:SetPoint(MeleeStats_Settings["frameRelativePos"], MeleeStats_Settings["frameXPos"], MeleeStats_Settings["frameYPos"])
-	f:SetFrameStrata("background")
+	f:SetFrameStrata("MEDIUM")
 	
 	if MeleeStats_Settings["frameLocked"]
 	then
@@ -260,7 +260,7 @@ function MeleeStats_MakeFrame()
 
 	MeleeStats_Frame_Font = MeleeStats_Frame:CreateFontString();
 	MeleeStats_Frame_Font:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE", "");
-	MeleeStats_Frame_Font:SetPoint("left", MeleeStats_Frame, 0, 0)
+	MeleeStats_Frame_Font:SetPoint("LEFT", MeleeStats_Frame, 0, 0)
 	MeleeStats_Frame_Font:SetWidth(500);
 	MeleeStats_Frame_Font:SetHeight(30);
 	MeleeStats_Frame_Font:SetText("BACON");
