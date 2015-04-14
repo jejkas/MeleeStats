@@ -23,14 +23,14 @@ SlashCmdList["MeleeStats"] = function(args)
 		then
 			MeleeStats_("Frame locked");
 			MeleeStats_Settings["frameLocked"] = true;
-			MeleeStats_Settings.texture:SetVertexColor(0,0,0,0)
+			MeleeStats_Frame.texture:SetVertexColor(0,0,0,0)
 			MeleeStats_Frame:SetMovable(false);
 			MeleeStats_Frame:EnableMouse(false);
 			MeleeStats_Frame:SetResizable(false);
 		else
 			MeleeStats_("Frame unlocked");
 			MeleeStats_Settings["frameLocked"] = false;
-			MeleeStats_Settings.texture:SetVertexColor(0,0,0,0.4)
+			MeleeStats_Frame.texture:SetVertexColor(0,0,0,0.4)
 			MeleeStats_Frame:SetMovable(true);
 			MeleeStats_Frame:EnableMouse(true);
 			MeleeStats_Frame:SetResizable(true);
