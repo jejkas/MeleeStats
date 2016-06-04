@@ -105,6 +105,14 @@ function MeleeStats_GetStats()
 	
 	local miss = 27;
 	local tohit = BonusScanner:GetBonus("TOHIT");
+	local playerClass, englishClass = UnitClass("player");
+	
+	-- Rogue checks
+	if englishClass == "ROGUE"
+	then
+		nameTalent, icon, iconx, icony, currRank, maxRank= GetTalentInfo(2,6);
+		tohit = tohit + currRank; -- Hit talent.
+	end;
 	local crit = MeleeStats_GetCrit();
 	
 	local maxCrit = 100-glance-dodge-miss+tohit;
@@ -119,6 +127,18 @@ function MeleeStats_GetStats()
 end;
 
 
+
+function MeleeStats_LT()
+	local numTabs = GetNumTalentTabs();
+	for t=1, numTabs do
+		DEFAULT_CHAT_FRAME:AddMessage(GetTalentTabInfo(t)..":");
+		local numTalents = GetNumTalents(t);
+		for i=1, numTalents do
+			nameTalent, icon, iconx, icony, currRank, maxRank= GetTalentInfo(t,i);
+			DEFAULT_CHAT_FRAME:AddMessage("- ("..t.." / "..i..")"..nameTalent..": "..currRank.."/"..maxRank);
+		end
+	end
+end;
 
 
 
@@ -236,7 +256,7 @@ MeleeStats_Frame_Font = "";
 
 function MeleeStats_MakeFrame()
 	local f = MeleeStats_Frame;
-	f.texture = f:CreateTexture(nil,"background");
+	f.texture = f:CreateTexture(nil,"OVERLAY");
 	f.texture:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background");
 	f:SetWidth(500)
 	f:SetHeight(30)
