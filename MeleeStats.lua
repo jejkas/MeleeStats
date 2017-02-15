@@ -103,7 +103,15 @@ function MeleeStats_GetStats()
 	local glance = 40;
 	local dodge = 6.5;
 	
+	local mainSpeed, offSpeed = UnitAttackSpeed("Player");
+	
 	local miss = 27;
+	
+	if not offSpeed -- No offhand
+	then
+		miss = 8;
+	end
+	
 	local tohit = BonusScanner:GetBonus("TOHIT");
 	local playerClass, englishClass = UnitClass("player");
 	
