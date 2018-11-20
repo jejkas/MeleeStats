@@ -104,12 +104,32 @@ function MeleeStats_GetStats()
 	local dodge = 6.5;
 	
 	local mainSpeed, offSpeed = UnitAttackSpeed("Player");
+	local weaponSkillMainBase, weaponSkillMainMod, weaponSkillOffBase, weaponSkillOffMod = UnitAttackBothHands("Player")
+
+	local mainHandWeaponSkill = weaponSkillMainBase + weaponSkillMainMod;
+	local offHandWeaponSkill = weaponSkillOffBase + weaponSkillOffMod;
 	
-	local miss = 27;
+	local miss = 5.6 + 19;
 	
 	if not offSpeed -- No offhand
 	then
-		miss = 8;
+		miss = miss - 19; -- remove offhand penalty 
+	end
+
+	local targetLevel = UnitLevel("target");
+	if targetLevel == nil or targetLevel == -1 or targetLevel == 0
+	then
+		targetLevel = UnitLevel("player")+3 -- If we do not have a target, or the target is a boss, set it to our level +3
+	end
+
+	local targetDefenseSkill = targetLevel * 5;
+	local skillDiff = mainHandWeaponSkill - targetDefenseSkill
+
+	if skillDiff < -10
+	then
+		miss = miss - (((skillDiff + 10) * 0.4) - 1.0)
+	else
+		miss = miss - (skillDiff * 0.1)
 	end
 	
 	local tohit = BonusScanner:GetBonus("TOHIT");
