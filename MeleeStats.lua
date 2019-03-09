@@ -69,8 +69,8 @@ function MeleeStats_OnEvent()
 end
 -- /script MeleeStats_UpdateString();
 function MeleeStats_UpdateString()
-	local tohit, crit, maxCrit, critLeft, miss, attackPower = MeleeStats_GetStats();
-	MeleeStats_Frame_Font:SetText(attackPower.."ap h:".. tohit .. "% c:" .. crit .. "% cl:" .. critLeft .. "% m:" .. miss .. "%");
+	local tohit, crit, maxCrit, critLeft, miss, attackPower, haste = MeleeStats_GetStats();
+	MeleeStats_Frame_Font:SetText(attackPower.."ap h:".. tohit .. "% c:" .. crit .. "% cl:" .. critLeft .. "% m:" .. miss .. "% haste:" .. haste .. "%");
 end;
 
 
@@ -98,38 +98,43 @@ function MeleeStats_GetCrit()
 end
 
 
+-- /script MeleeStats_(MeleeStats_GetWeaponBaseSpeed());
+function MeleeStats_GetWeaponBaseSpeed()
+	local slotid, _ = GetInventorySlotInfo("MainHandSlot");
+	local hasItem = MeleeStats_tooltip:SetInventoryItem("player", slotid);
+	if ( hasItem )
+	then
+		local tmpText = getglobal("MeleeStats_tooltipTextRight4");
+		if (tmpText:GetText())
+		then
+			line = tmpText:GetText();
+			local _, _, tmpStr = string.find(line, "^Speed (.*)$");
+			if (tmpStr == nil)
+			then
+				return 0;
+			else
+				return tonumber(tmpStr);
+			end
+		end
+	end
+end
+
+
 -- /script MeleeStats_(MeleeStats_GetStats());
 function MeleeStats_GetStats()
 	local glance = 40;
 	local dodge = 6.5;
 	
 	local mainSpeed, offSpeed = UnitAttackSpeed("Player");
-	local weaponSkillMainBase, weaponSkillMainMod, weaponSkillOffBase, weaponSkillOffMod = UnitAttackBothHands("Player")
-
-	local mainHandWeaponSkill = weaponSkillMainBase + weaponSkillMainMod;
-	local offHandWeaponSkill = weaponSkillOffBase + weaponSkillOffMod;
+	local mainSpeedBase = MeleeStats_GetWeaponBaseSpeed();
+	local haste = tonumber((mainSpeedBase / mainSpeed))-1;
+	print (math.floor((haste-1)*100));
 	
-	local miss = 5.6 + 19;
+	local miss = 27;
 	
 	if not offSpeed -- No offhand
 	then
-		miss = miss - 19; -- remove offhand penalty 
-	end
-
-	local targetLevel = UnitLevel("target");
-	if targetLevel == nil or targetLevel == -1 or targetLevel == 0
-	then
-		targetLevel = UnitLevel("player")+3 -- If we do not have a target, or the target is a boss, set it to our level +3
-	end
-
-	local targetDefenseSkill = targetLevel * 5;
-	local skillDiff = mainHandWeaponSkill - targetDefenseSkill
-
-	if skillDiff < -10
-	then
-		miss = miss - (((skillDiff + 10) * 0.4) - 1.0)
-	else
-		miss = miss - (skillDiff * 0.1)
+		miss = 8;
 	end
 	
 	local tohit = BonusScanner:GetBonus("TOHIT");
@@ -151,7 +156,7 @@ function MeleeStats_GetStats()
 	local base, posBuff, negBuff = UnitAttackPower("player");
 	local attackPower = base + posBuff + negBuff;
 	
-	return tohit, crit, maxCrit, critLeft, miss-tohit, attackPower;
+	return tohit, crit, maxCrit, critLeft, miss-tohit, attackPower, haste;
 end;
 
 
