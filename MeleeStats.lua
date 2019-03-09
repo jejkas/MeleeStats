@@ -131,8 +131,7 @@ function MeleeStats_GetStats()
 	
 	local mainSpeed, offSpeed = UnitAttackSpeed("Player");
 	local mainSpeedBase = MeleeStats_GetWeaponBaseSpeed();
-	local haste = tonumber((mainSpeedBase / mainSpeed))-1;
-	print (math.floor((haste-1)*100));
+	local haste = math.floor((tonumber((mainSpeedBase / mainSpeed))-1)*10000)/100;
 	
 	local miss = 5.6 + 19;
 	
